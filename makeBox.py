@@ -6,13 +6,17 @@ import sys
 xForward = 0
 yForward = 0
 
-space = 0
-newLine = 0
+space = 3#pixel
+newLine = 15#pixel
+
+lengthList = {}
+topList = {}
+bottomList = {}
 
 def makeBox():
     
-    myFile = codecs.open("a.txt")
-    for line in myFile:
+    textFile = codecs.open("a.txt", "r")
+    for line in textFile:
         words = line.split()
         for word in words:
             findBound(word)
@@ -22,26 +26,29 @@ def makeBox():
 
 
 def findBound(word):
-    
-    xp = []
-    xm = []
-    yp = []
-    xm = []
+        
+    top = []
+    bottom = []
     
     for char in word:
-        xp.append(xplist[char])
-        yp.append(yplist[char])
-        xm.append(xmlist[char])
-        ym.append(yplist[char])
+        length += lengthList[char]
+        bottom.append(bottomList[char])
+        top.append(topList[char])        
         
-    addBox( max(xp), max(yp), max(xm), max(ym) )
+    addBox( max(bottom), length, max(top), word )
     
 
-def addBox(xp, yp, xm, ym):
+def addBox(bottom, length, top, word):
+    boxFile = codecs.open("a.txt", "w")
+    boxFile.write(word, space, bottom, space+length, top)
+    
+
+def main():
     pass
     
     
-    
+if __name__ == '__main__':
+    pass
     
     
     
