@@ -2,6 +2,8 @@
 
 import codecs
 import sys
+import topList
+import bottomList
 
 xForward = 0
 yForward = 0
@@ -15,7 +17,7 @@ bottomList = {}
 
 def makeBox():
     
-    textFile = codecs.open("a.txt", "r")
+    textFile = codecs.open(sys.argv[1], "r")
     for line in textFile:
         words = line.split()
         for word in words:
@@ -32,23 +34,26 @@ def findBound(word):
     
     for char in word:
         length += lengthList[char]
-        bottom.append(bottomList[char])
-        top.append(topList[char])        
+        bottom.append(bottomList[char][1])
+        top.append(topList[char][0])        
         
     addBox( max(bottom), length, max(top), word )
     
 
 def addBox(bottom, length, top, word):
-    boxFile = codecs.open("a.txt", "w")
-    boxFile.write(word, space, bottom, space+length, top)
+    boxFile = codecs.open(sys.argv[1], "w")
+    boxFile.write(word, xForward, bottom, xForward+length, top, 0)
     
 
 def main():
-    pass
+    if len(sys.argv) != 2:
+        sys.exit( "file %s not found" % sys.argv[1] )
+    else:
+        makeBox()
     
     
 if __name__ == '__main__':
-    pass
+    main()
     
     
     
