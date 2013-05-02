@@ -12,8 +12,7 @@ space = 3#pixel
 newLine = 15#pixel
 
 lengthList = {}
-topList = {}
-bottomList = {}
+
 
 def makeBox():
     
@@ -33,20 +32,22 @@ def findBound(word):
     bottom = []
     
     for char in word:
-        length += lengthList[char]
-        bottom.append(bottomList[char][1])
-        top.append(topList[char][0])        
+        length += lengthList[char][0]
+        bottom.append(lengthList[char][1])
+        top.append(lengthList[char][2])
         
     addBox( max(bottom), length, max(top), word )
     
 
 def addBox(bottom, length, top, word):
-    boxFile = codecs.open(sys.argv[1], "w")
+    
+    outFile = sys.argv[1].split(".txt")[0] + ".exp%s"%sys.argv[2] + ".box"
+    boxFile = codecs.open(outFile, "w")
     boxFile.write(word, xForward, bottom, xForward+length, top, 0)
     
 
 def main():
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 3:
         sys.exit( "file %s not found" % sys.argv[1] )
     else:
         makeBox()
