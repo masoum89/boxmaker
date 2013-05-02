@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
 import codecs
-
+import sys
 
 def fix():
     
-    inFile = codecs.open("in.txt", "r")
+    inFile = codecs.open(sys.argv[1], "r")
     outFile = codes.open("out.txt", "w")
     
     for line in inFile:
@@ -19,7 +19,7 @@ def fix():
 def calc_length(word):
     length = 0
     for ch in word:
-        length = length + xList(ch)
+        length = length + xList[ch][2]
         
     return length
 
