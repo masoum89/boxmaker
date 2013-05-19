@@ -1,9 +1,11 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import codecs
 import sys
-import topList
-import bottomList
+
+import arabic_reshaper
+from bidi.algorithm import get_display
 
 xForward = 0
 yForward = 0
@@ -11,14 +13,17 @@ yForward = 0
 space = 3#pixel
 newLine = 15#pixel
 
-lengthList = {}
+lengthList = {
+    u'ا' : [14,0,2],
+    u'ب' : [8, 5, 17]
+}
 
 
 def makeBox():
     
     textFile = codecs.open(sys.argv[1], "r")
     for line in textFile:
-        words = line.split()
+        words = get_display(arabic_reshaper.reshape(line)).split()
         for word in words:
             findBound(word)
             
@@ -48,7 +53,7 @@ def addBox(bottom, length, top, word):
 
 def main():
     if len(sys.argv) != 3:
-        sys.exit( "file %s not found" % sys.argv[1] )
+        sys.exit( "file %s not found" % sys.argv[0] )
     else:
         makeBox()
     
