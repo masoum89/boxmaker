@@ -4,7 +4,7 @@
 import codecs
 import sys
 
-sys.path.insert(0 , './lib')
+sys.path.insert(0 , './header')
 
 import arabic_reshaper
 from bidi.algorithm import get_display
