@@ -4,63 +4,79 @@
 import codecs
 import sys
 
+sys.path.insert(0 , './lib')
+
 import arabic_reshaper
 from bidi.algorithm import get_display
 
-xForward = 0
-yForward = 0
+import bound
 
-space = 3#pixel
+xForward = 28
+yForward = 561
+
+space = 8#pixel
 newLine = 15#pixel
 
-lengthList = {
-    u'ا' : [14,0,2],
-    u'ب' : [8, 5, 17]
-}
+outFile = sys.argv[1].split(".txt")[0] + ".exp%s" %sys.argv[2] + ".box"
+boxFile = codecs.open(outFile, "w", "utf-8")
 
 
 def makeBox():
     
-    textFile = codecs.open(sys.argv[1], "r")
+    global newLine
+    global xForward
+    global yForward
+    
+    textFile = codecs.open(sys.argv[1], "r","utf-8")
+
     for line in textFile:
-        words = get_display(arabic_reshaper.reshape(line)).split()
-        for word in words:
-            findBound(word)
-            
-        newLine += newLine
-        space = 0   
+        words = line.split()
+        
+        for word in words:            
+            #findBound( get_display(arabic_reshaper.reshape(word)) )
+            findBound( word )
+            xForward = xForward + space
+        
+        newLine += newLine        
+        yForward -=28
+
 
 
 def findBound(word):
-        
+    length=0    
     top = []
-    bottom = []
-    
-    for char in word:
-        length += lengthList[char][0]
-        bottom.append(lengthList[char][1])
-        top.append(lengthList[char][2])
+    bottom = []    
         
-    addBox( max(bottom), length, max(top), word )
+    for char in word:
+        length += bound.lengthList[char][2]
+        bottom.append(bound.lengthList[char][1])
+        top.append(bound.lengthList[char][0])        
+  
+    addBox(max(bottom),length,max(top),word)
     
 
 def addBox(bottom, length, top, word):
     
-    outFile = sys.argv[1].split(".txt")[0] + ".exp%s"%sys.argv[2] + ".box"
-    boxFile = codecs.open(outFile, "w")
-    boxFile.write(word, xForward, bottom, xForward+length, top, 0)
+    global xForward 
+     
+    print word, xForward, yForward-bottom, xForward+length, yForward+top ,"0" 
+    xForward = xForward + length 
+            
+    boxFile.write( unicode(word.encode('utf-8'),'utf-8')+" "+str(xForward)+" "+str(yForward-bottom)+" "+ 
+        str(xForward+length)+
+        " "+str(yForward+top)+"\n"
+    )
     
 
 def main():
+
     if len(sys.argv) != 3:
-        sys.exit( "file %s not found" % sys.argv[0] )
+        sys.exit( "file %s not found" % sys.argv[1] )
     else:
-        makeBox()
+		makeBox()
     
     
 if __name__ == '__main__':
     main()
-    
-    
     
     
